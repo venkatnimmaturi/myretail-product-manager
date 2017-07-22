@@ -4,4 +4,7 @@ info:
 server:
   port: 8082
   
- 
+spring:
+  profiles:
+    include:
+      - rsclient 

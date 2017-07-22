@@ -22,9 +22,13 @@ dependencyManagement {
 }
 
 dependencies {
-    //compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter-web')
 	compile('com.fasterxml.jackson.core:jackson-annotations')
     compile('org.projectlombok:lombok')
+	compile('commons-validator:commons-validator:1.5.1')
+    
+    compile project(':myretail-product-api')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

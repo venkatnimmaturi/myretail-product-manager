@@ -1,1 +1,1 @@
-include "myretail-product-api", "myretail-product-service"
+include "myretail-product-api", "myretail-product-service", "myretail-product-rsclient"
