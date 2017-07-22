@@ -1,6 +1,5 @@
 package myretail.product.rsclient.config.spring;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +48,4 @@ public class RestClientAppConfig {
 		return restTemplate;
 	}
 
-	public URI rootUri() {
-		try {
-			return new URI(endpointConfig.getUrl());
-		} catch (Exception e) {
-			// shouldn't happen
-			return null;
-		}
-	}
 }

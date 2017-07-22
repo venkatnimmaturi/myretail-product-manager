@@ -2,7 +2,7 @@ myretail:
  product:
   rsclient:
    endpoint:
-    url: "http://redsky.target.com/v2/pdp/tcin"
+    url: "http://redsky.target.com/v2/pdp/tcin/{id}"
     auth-user: "casestudyuser"
     encrypted-password: "Encryptd"
     connection-timeout: 20000
