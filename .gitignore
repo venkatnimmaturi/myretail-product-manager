@@ -8,3 +8,15 @@
 .gradle/2.2.1/taskArtifacts/cache.properties.lock
 .gradle/2.2.1/taskArtifacts/cache.properties
 .classpath
+/build/
+myretail-product-service/.gitignore
+myretail-product-api/.settings/org.eclipse.wst.common.project.facet.core.xml
+myretail-product-api/.settings/org.eclipse.jdt.core.prefs
+myretail-product-api/.settings/gradle/org.springsource.ide.eclipse.gradle.refresh.prefs
+myretail-product-api/.settings/gradle/org.springsource.ide.eclipse.gradle.core.prefs
+.settings/gradle/org.springsource.ide.eclipse.gradle.core.import.prefs
+.settings/org.eclipse.jdt.core.prefs
+myretail-product-service/.settings/org.eclipse.wst.common.project.facet.core.xml
+myretail-product-service/.settings/org.eclipse.jdt.core.prefs
+myretail-product-service/.settings/gradle/org.springsource.ide.eclipse.gradle.refresh.prefs
+myretail-product-service/.settings/gradle/org.springsource.ide.eclipse.gradle.core.prefs

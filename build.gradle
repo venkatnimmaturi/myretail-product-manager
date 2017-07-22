@@ -1,18 +1,19 @@
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'eclipse'
 
-    repositories {
-       mavenCentral()
-    }
 
-    dependencies {
-        testCompile 'junit:junit:4.8.2'
-    }
+allprojects{
+apply plugin: 'maven-publish'
+}
 
-    version = '1.0'
+jar {
+    baseName = 'myretail-product-manager'
+    version = '1.0.0-SNAPSHOT'
+}
 
-    jar {
-        manifest.attributes provider: 'my cool company'
-    }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
 }
