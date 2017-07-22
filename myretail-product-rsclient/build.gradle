@@ -10,7 +10,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 
 jar {
-    baseName = 'myretail-product-api'
+    baseName = 'myretail-product-rsclient'
     version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
