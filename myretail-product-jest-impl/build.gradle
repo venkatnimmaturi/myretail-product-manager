@@ -10,7 +10,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 
 jar {
-    baseName = 'myretail-product-api'
+    baseName = 'myretail-product-jest-impl'
     version = '0.0.1-SNAPSHOT'
 }
 sourceCompatibility = 1.8
@@ -22,13 +22,11 @@ dependencyManagement {
 }
 
 dependencies {
-    //compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter')
 	compile('com.fasterxml.jackson.core:jackson-annotations')
-	compile('com.fasterxml.jackson.core:jackson-databind')
-	
     compile('org.projectlombok:lombok')
-	compile('org.joda:joda-money:0.12')
-    
+    compile project(':myretail-jest-common')
+    compile project(':myretail-product-api')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

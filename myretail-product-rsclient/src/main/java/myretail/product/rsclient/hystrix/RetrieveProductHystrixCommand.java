@@ -38,7 +38,7 @@ public class RetrieveProductHystrixCommand {
 		if (title instanceof MissingNode) {
 			// TODO: deal later
 		} else {
-			Product product = Product.builder().productId(request.getProductId()).productName(title.asText()).build();
+			Product product = Product.builder().id(request.getProductId()).name(title.asText()).build();
 			response = RetrieveProductCommandResponse.builder().product(product)
 					.status(Status.builder().resultStatus(ResultStatus.SUCCESS).build()).build();
 		}

@@ -24,3 +24,7 @@ myretail-product-rsclient/.settings/org.eclipse.wst.common.project.facet.core.xm
 myretail-product-rsclient/.settings/org.eclipse.jdt.core.prefs
 myretail-product-rsclient/.settings/gradle/org.springsource.ide.eclipse.gradle.refresh.prefs
 myretail-product-rsclient/.settings/gradle/org.springsource.ide.eclipse.gradle.core.prefs
+myretail-product-jest-impl/.settings/org.eclipse.wst.common.project.facet.core.xml
+myretail-product-jest-impl/.settings/org.eclipse.jdt.core.prefs
+myretail-product-jest-impl/.settings/gradle/org.springsource.ide.eclipse.gradle.refresh.prefs
+myretail-product-jest-impl/.settings/gradle/org.springsource.ide.eclipse.gradle.core.prefs

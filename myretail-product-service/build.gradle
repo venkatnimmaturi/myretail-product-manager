@@ -29,6 +29,7 @@ dependencies {
     compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
     compile project(':myretail-product-api')
     compile project(':myretail-product-rsclient')
+    compile project(':myretail-product-jest-impl')
     compile('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

@@ -6,5 +6,4 @@ server:
   
 spring:
   profiles:
-    include:
-      - rsclient 
+    include: rsclient,elastic

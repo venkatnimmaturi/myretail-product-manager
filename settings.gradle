@@ -1,1 +1,2 @@
-include "myretail-product-api", "myretail-product-service", "myretail-product-rsclient"
+include "myretail-product-api", "myretail-product-service", "myretail-product-rsclient", "myretail-product-jest-impl", "myretail-jest-common"
+project(':myretail-jest-common').projectDir = new File(settingsDir, '../my-retail-elastic/myretail-jest-common')
