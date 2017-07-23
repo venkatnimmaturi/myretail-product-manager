@@ -10,7 +10,7 @@ import myretail.product.api.model.Product;
 @Getter
 @Setter
 @Builder
-public class ProductRetrievalApiResponse implements ApiResponse {
+public class ProductApiResponse implements ApiResponse {
 
 	Product product;
 	ElasticStatus status;

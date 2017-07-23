@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,12 @@ public class ProductController {
 
 		log.debug("Initiating Request to find product details for {id}:" + id);
 		return productHandler.retrieveProductInfo(RetrieveProductCommandRequest.builder().productId(id).build());
+	}
+
+	@RequestMapping(value = "/products/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Product> updateProductInfo(@PathVariable("id") long id, @RequestBody Product product) {
+
+		log.debug("Initiating update Request to update product price for {id}:" + id);
+		return productHandler.updateProductInfo(id, product);
 	}
 }

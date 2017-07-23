@@ -11,11 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
+import myretail.jest.client.model.common.ElasticStatus;
 import myretail.product.api.model.Product;
 import myretail.product.api.model.Product.ProductBuilder;
-import myretail.product.command.api.ProductRetrievalCommand;
-import myretail.product.command.request.ProductRetrievalApiRequest;
-import myretail.product.command.response.ProductRetrievalApiResponse;
+import myretail.product.command.api.ProductEsCommand;
+import myretail.product.command.request.ProductApiRequest;
+import myretail.product.command.request.ProductApiRequest.Action;
+import myretail.product.command.response.ProductApiResponse;
 import myretail.product.rsclient.api.RetrieveProductCommand;
 import myretail.product.rsclient.model.request.RetrieveProductCommandRequest;
 import myretail.product.rsclient.model.response.RetrieveProductCommandResponse;
@@ -28,7 +30,7 @@ public class ProductHandler {
 	RetrieveProductCommand productCommand;
 
 	@Autowired
-	ProductRetrievalCommand elasticSearchCommand;
+	ProductEsCommand elasticSearchCommand;
 
 	@Autowired
 	ThreadPoolExecutor taskExecutor;
@@ -37,23 +39,24 @@ public class ProductHandler {
 
 		ResponseEntity<Product> consolidatedResponse = null;
 		ProductBuilder productBuilder = Product.builder();
-		ProductRetrievalApiRequest elasticSearchRequest = ProductRetrievalApiRequest.builder()
-				.id(request.getProductId()).build();
+		Product requestObj = Product.builder().id(request.getProductId()).build();
+		ProductApiRequest elasticSearchRequest = ProductApiRequest.builder().product(requestObj).action(Action.READ)
+				.build();
 
 		Future<RetrieveProductCommandResponse> futureRestResponse = taskExecutor
 				.submit(new ProductRetrieverRestClientTask(request));
 
-		Future<ProductRetrievalApiResponse> futureEsResponse = taskExecutor
+		Future<ProductApiResponse> futureEsResponse = taskExecutor
 				.submit(new ProductRetrieverElasticsearchClientTask(elasticSearchRequest));
 		try {
 			RetrieveProductCommandResponse restResponse = futureRestResponse.get();
 			productBuilder.id(request.getProductId()).name(restResponse.getProduct().getName());
-			ProductRetrievalApiResponse esResponse = futureEsResponse.get();
+			ProductApiResponse esResponse = futureEsResponse.get();
 			productBuilder.price(esResponse.getProduct().getPrice());
 			consolidatedResponse = new ResponseEntity<>(productBuilder.build(), HttpStatus.OK);
 		} catch (InterruptedException | ExecutionException e) {
 			log.debug("Exception occurred when fetching product info", e.getMessage());
-			consolidatedResponse = new ResponseEntity<Product>(HttpStatus.BAD_REQUEST);
+			consolidatedResponse = new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
 		return consolidatedResponse;
 
@@ -73,17 +76,45 @@ public class ProductHandler {
 
 	}
 
-	private class ProductRetrieverElasticsearchClientTask implements Callable<ProductRetrievalApiResponse> {
-		ProductRetrievalApiRequest esRequest;
+	private class ProductRetrieverElasticsearchClientTask implements Callable<ProductApiResponse> {
+		ProductApiRequest esRequest;
 
-		public ProductRetrieverElasticsearchClientTask(ProductRetrievalApiRequest esRequest) {
+		public ProductRetrieverElasticsearchClientTask(ProductApiRequest esRequest) {
 			this.esRequest = esRequest;
 		}
 
 		@Override
-		public ProductRetrievalApiResponse call() throws Exception {
+		public ProductApiResponse call() throws Exception {
 			return elasticSearchCommand.execute(esRequest);
 		}
 
+	}
+
+	public ResponseEntity<Product> updateProductInfo(long id, Product product) {
+
+		ResponseEntity<Product> response = null;
+		Product requestObj = Product.builder().id(id).build();
+		ProductApiRequest elasticSearchRequest = ProductApiRequest.builder().product(requestObj).action(Action.READ)
+				.build();
+
+		ProductApiResponse existingProductResponse = elasticSearchCommand.execute(elasticSearchRequest);
+		if (existingProductResponse != null && existingProductResponse.getProduct() != null
+				&& existingProductResponse.getProduct().getId() != null) {
+			Product updatedProduct = existingProductResponse.getProduct();
+			updatedProduct.setPrice(product.getPrice());
+			ProductApiRequest elasticSearchUpdateRequest = ProductApiRequest.builder().product(updatedProduct)
+					.action(Action.UPDATE).build();
+			ProductApiResponse updatedProductResponse = elasticSearchCommand.execute(elasticSearchUpdateRequest);
+			if (updatedProductResponse.getStatus() == ElasticStatus.SUCCESS) {
+				response = new ResponseEntity<Product>(updatedProductResponse.getProduct(), HttpStatus.OK);
+			} else {
+				response = new ResponseEntity<Product>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} else {
+			response = new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+		}
+
+		return response;
 	}
 }
