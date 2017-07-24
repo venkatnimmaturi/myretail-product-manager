@@ -14,6 +14,8 @@ import lombok.Setter;
 import myretail.product.converter.jackson.MoneyDeserializer;
 import myretail.product.converter.jackson.MoneySerializer;
 
+import javax.validation.constraints.*;
+
 @Getter
 @Setter
 @Builder
@@ -21,9 +23,14 @@ import myretail.product.converter.jackson.MoneySerializer;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
 
+	@NotNull
 	Long id;
+
+	@NotNull
 	String name;
+
 	@JsonDeserialize(using = MoneyDeserializer.class)
 	@JsonSerialize(using = MoneySerializer.class)
+	@NotNull
 	Money price;
 }

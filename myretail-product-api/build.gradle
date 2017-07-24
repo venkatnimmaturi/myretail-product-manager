@@ -23,6 +23,8 @@ dependencyManagement {
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter')
+	compile('javax.validation:validation-api')
+    
 	compile('com.fasterxml.jackson.core:jackson-annotations')
 	compile('com.fasterxml.jackson.core:jackson-databind')
 	

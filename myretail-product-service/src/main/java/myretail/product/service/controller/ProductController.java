@@ -1,8 +1,13 @@
 package myretail.product.service.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +35,16 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/products/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Product> updateProductInfo(@PathVariable("id") long id, @RequestBody Product product) {
+	public ResponseEntity<Product> updateProductInfo(@PathVariable("id") Long id, @Valid @RequestBody Product product)
+			throws MethodArgumentNotValidException, NoSuchMethodException, SecurityException {
 
 		log.debug("Initiating update Request to update product price for {id}:" + id);
+		if (product.getPrice().getAmount().intValue() <= 0) {
+			BeanPropertyBindingResult errors = new BeanPropertyBindingResult(product.getPrice().getAmount(), "value");
+			throw new MethodArgumentNotValidException(new MethodParameter(
+					this.getClass().getDeclaredMethod("updateProductInfo", Long.class, Product.class), 0), errors);
+
+		}
 		return productHandler.updateProductInfo(id, product);
 	}
 }
