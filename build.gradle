@@ -1,10 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'org.asciidoctor.convert'
 
-
-allprojects{
-apply plugin: 'maven-publish'
-}
 
 jar {
     baseName = 'myretail-product-manager'

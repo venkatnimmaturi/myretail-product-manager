@@ -41,7 +41,7 @@ public class ProductEsHystrixCommand
 			try {
 				JestResult result = jestClient.execute(get);
 				if (result.isSucceeded()) {
-					Product product = result.getSourceAsObject(Product.class, false);
+					Product product = result.getSourceAsObject(Product.class);
 					builder.result(product).status(ElasticStatus.SUCCESS);
 				} else {
 					builder.status(ElasticStatus.ERROR);

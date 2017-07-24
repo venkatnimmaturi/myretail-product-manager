@@ -39,9 +39,7 @@ dependencies {
 	testCompile('info.cukes:cucumber-spring:1.2.5')
 	testCompile('org.apache.logging.log4j:log4j-api:2.8.2')
 	testCompile('org.apache.logging.log4j:log4j-core:2.8.2')
+	testCompile('org.elasticsearch:elasticsearch:5.5.0')
 	testCompile('org.elasticsearch.plugin:transport-netty4-client:5.1.1')
-
-	
-	
     
 }

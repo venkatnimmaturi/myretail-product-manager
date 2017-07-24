@@ -22,7 +22,7 @@ dependencyManagement {
 }
 
 dependencies {
-    //compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.boot:spring-boot-starter')
 	compile('com.fasterxml.jackson.core:jackson-annotations')
 	compile('com.fasterxml.jackson.core:jackson-databind')
 	

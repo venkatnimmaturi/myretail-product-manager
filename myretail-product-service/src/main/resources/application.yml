@@ -1,8 +1,10 @@
 info:
  component: MyRetail Product Service
- 
+
+#tag:adoc_server_port[] 
 server:
   port: 8082
+#end:adoc_server_port[] 
   
 spring:
   profiles:
