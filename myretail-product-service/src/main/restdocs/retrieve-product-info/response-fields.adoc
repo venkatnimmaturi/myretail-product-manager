@@ -1,0 +1,20 @@
+|===
+|Path|Type|Description
+
+|`id`
+|`Number`
+|Product ID
+
+|`name`
+|`String`
+|Product Name
+
+|`price.value`
+|`Number`
+|Product Price
+
+|`price.currency_code`
+|`String`
+|Currency Code
+
+|===

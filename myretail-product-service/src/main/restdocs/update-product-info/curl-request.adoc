@@ -1,0 +1,11 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/products/10' -i -X PUT -H 'Content-Type: application/json;charset=UTF-8' -d '{
+  "id" : 10,
+  "name" : "Mock Product",
+  "price" : {
+    "value" : 15.3,
+    "currency_code" : "USD"
+  }
+}'
+----

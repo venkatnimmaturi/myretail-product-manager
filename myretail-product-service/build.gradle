@@ -32,4 +32,5 @@ dependencies {
     compile project(':myretail-product-jest-impl')
     compile('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile("org.springframework.restdocs:spring-restdocs-mockmvc")
 }

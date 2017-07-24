@@ -1,0 +1,15 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 117
+
+{
+  "id" : 10,
+  "name" : "Not Available",
+  "price" : {
+    "value" : 10.3,
+    "currency_code" : "USD"
+  }
+}
+----
