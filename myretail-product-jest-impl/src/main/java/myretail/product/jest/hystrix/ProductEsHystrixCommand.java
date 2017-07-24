@@ -5,6 +5,9 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Update;
@@ -24,6 +27,9 @@ public class ProductEsHystrixCommand
 	ElasticsearchProperties properties;
 
 	@Override
+	@HystrixCommand(fallbackMethod = "defaultResponse", commandProperties = {
+			@HystrixProperty(name = "requestCache.enabled", value = "false"),
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "15000") })
 	public ProductCallResponse executeJestCall(RetrieveProductCallRequest request) {
 		ProductCallResponseBuilder builder = ProductCallResponse.builder();
 
@@ -67,6 +73,12 @@ public class ProductEsHystrixCommand
 		}
 
 		return builder.build();
+	}
+
+	public ProductCallResponse defaultResponse(RetrieveProductCallRequest callRequest, Throwable t) {
+		ProductCallResponseBuilder responseBuilder = ProductCallResponse.builder();
+		responseBuilder.status(ElasticStatus.EMPTY_RESULT);
+		return responseBuilder.build();
 	}
 
 }

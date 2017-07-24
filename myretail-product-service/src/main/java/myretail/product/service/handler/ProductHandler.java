@@ -5,6 +5,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import org.joda.money.CurrencyUnit;
+import org.joda.money.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import myretail.product.command.request.ProductApiRequest;
 import myretail.product.command.request.ProductApiRequest.Action;
 import myretail.product.command.response.ProductApiResponse;
 import myretail.product.rsclient.api.RetrieveProductCommand;
+import myretail.product.rsclient.model.Status.ResultStatus;
 import myretail.product.rsclient.model.request.RetrieveProductCommandRequest;
 import myretail.product.rsclient.model.response.RetrieveProductCommandResponse;
 
@@ -49,10 +52,21 @@ public class ProductHandler {
 		Future<ProductApiResponse> futureEsResponse = taskExecutor
 				.submit(new ProductRetrieverElasticsearchClientTask(elasticSearchRequest));
 		try {
+			productBuilder.id(request.getProductId());
 			RetrieveProductCommandResponse restResponse = futureRestResponse.get();
-			productBuilder.id(request.getProductId()).name(restResponse.getProduct().getName());
+			if (restResponse.getStatus() != null
+					&& restResponse.getStatus().getResultStatus() == ResultStatus.SUCCESS) {
+				productBuilder.name(restResponse.getProduct().getName());
+			} else {
+				buildDefaultResponse(productBuilder, true);
+			}
+
 			ProductApiResponse esResponse = futureEsResponse.get();
-			productBuilder.price(esResponse.getProduct().getPrice());
+			if (esResponse != null && esResponse.getStatus() == ElasticStatus.SUCCESS) {
+				productBuilder.price(esResponse.getProduct().getPrice());
+			} else {
+				buildDefaultResponse(productBuilder, false);
+			}
 			consolidatedResponse = new ResponseEntity<>(productBuilder.build(), HttpStatus.OK);
 		} catch (InterruptedException | ExecutionException e) {
 			log.debug("Exception occurred when fetching product info", e.getMessage());
@@ -60,6 +74,21 @@ public class ProductHandler {
 		}
 		return consolidatedResponse;
 
+	}
+
+	/**
+	 * Eventually, the default response is set by Hystrix's fallback method.
+	 * 
+	 * @param productBuilder
+	 * @param restResponse
+	 */
+	private void buildDefaultResponse(ProductBuilder productBuilder, boolean restResponse) {
+
+		if (restResponse) {
+			productBuilder.name("Not Available");
+		} else {
+			productBuilder.price(Money.of(CurrencyUnit.of("USD"), 0.0));
+		}
 	}
 
 	private class ProductRetrieverRestClientTask implements Callable<RetrieveProductCommandResponse> {

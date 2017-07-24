@@ -4,7 +4,10 @@ buildscript {
 
 plugins { id "io.spring.dependency-management" version "1.0.0.RELEASE" }
 
-ext { springBootVersion = '1.5.3.RELEASE' }
+ext { 
+	springBootVersion = '1.5.3.RELEASE'
+	springCloudVersion = 'Dalston.RELEASE'
+ }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -19,11 +22,13 @@ repositories { mavenCentral() }
 
 dependencyManagement {
     imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+    imports { mavenBom("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}") }
 }
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
 	compile('com.fasterxml.jackson.core:jackson-annotations')
     compile('org.projectlombok:lombok')
 	compile('commons-validator:commons-validator:1.5.1')

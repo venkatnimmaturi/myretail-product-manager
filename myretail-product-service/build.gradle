@@ -26,7 +26,7 @@ dependencyManagement {
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
+    compile('org.springframework.cloud:spring-cloud-starter-hystrix')
     compile project(':myretail-product-api')
     compile project(':myretail-product-rsclient')
     compile project(':myretail-product-jest-impl')
