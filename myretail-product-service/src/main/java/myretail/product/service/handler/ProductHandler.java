@@ -54,6 +54,9 @@ public class ProductHandler {
 		try {
 			productBuilder.id(request.getProductId());
 			RetrieveProductCommandResponse restResponse = futureRestResponse.get();
+			//Eventually this check will go away and Hystrix should return appropriate response.
+			//we dont want to return 500 error if only REST call failed.
+
 			if (restResponse.getStatus() != null
 					&& restResponse.getStatus().getResultStatus() == ResultStatus.SUCCESS) {
 				productBuilder.name(restResponse.getProduct().getName());
@@ -62,6 +65,8 @@ public class ProductHandler {
 			}
 
 			ProductApiResponse esResponse = futureEsResponse.get();
+			//Eventually this check will go away and Hystrix should return appropriate response.
+			//we dont want to return 500 error if only Elastic call failed.
 			if (esResponse != null && esResponse.getStatus() == ElasticStatus.SUCCESS) {
 				productBuilder.price(esResponse.getProduct().getPrice());
 			} else {
@@ -70,7 +75,7 @@ public class ProductHandler {
 			consolidatedResponse = new ResponseEntity<>(productBuilder.build(), HttpStatus.OK);
 		} catch (InterruptedException | ExecutionException e) {
 			log.debug("Exception occurred when fetching product info", e.getMessage());
-			consolidatedResponse = new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+			consolidatedResponse = new ResponseEntity<Product>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return consolidatedResponse;
 
