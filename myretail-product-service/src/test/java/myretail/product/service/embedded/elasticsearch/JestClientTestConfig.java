@@ -41,6 +41,7 @@ public class JestClientTestConfig {
 	}
 
 	private HttpClientConfig httpClientConfig() {
+
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Money.class, new MoneyAdapter());
 		Gson gson = gsonBuilder.create();
